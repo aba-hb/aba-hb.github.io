@@ -4,5 +4,84 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    font-family: monospace;
+
+    --foreground-dark: #DDDDDDFF;
+    --foreground-light: #222222FF;
+    --background-dark: #222222FF;
+    --background-light: #DDDDDDFF;
+    --highlight-dark: #333333FF;
+    --highlight-light: #CCCCCCFF;
+
+    --foreground: none;
+    --background: none;
+    --highlight: none;
+}
+
+
+@media(prefers-color-scheme: light) {
+    * {
+        --foreground: var(--foreground-light);
+        --background: var(--background-light);
+        --highlight: var(--highlight-light);
+    }
+}
+
+
+@media(prefers-color-scheme: dark) {
+    * {
+        --foreground: var(--foreground-dark);
+        --background: var(--background-dark);
+        --highlight: var(--highlight-dark);
+    }
+}
+
+
+body {
+    color: var(--foreground);
+    background-color: var(--background);
+}
+
+
+header {
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+header > a {
+    height: 100%;
+    padding: 8px;
+}
+
+header > a:hover {
+    background-color: var(--highlight);
+}
+
+header > a > picture > img {
+    height: 100%;
+}
+
+header > ul {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    list-style: none;
+    justify-content: flex-end;
+}
+
+header > ul > li {
+    padding: 4px 16px;
+    align-content: center;
+}
+
+header > ul > li > a {
+    font-size: 16px;
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+header > ul > li:hover {
+    background-color: var(--highlight);
 }
 
