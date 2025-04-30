@@ -38,6 +38,9 @@
 
 
 body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
     color: var(--foreground);
     background-color: var(--background);
 }
@@ -83,5 +86,70 @@ header > ul > li > a {
 
 header > ul > li:hover {
     background-color: var(--highlight);
+}
+
+
+main {
+    flex-grow: 1;
+}
+
+
+footer {
+    text-align: center;
+    padding: 12px;
+}
+
+footer > ul {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 8px 0px;
+}
+
+footer > ul > li {
+    padding: 6px;
+    flex-grow: 0;
+    height: 100%;
+    width: fit-content;
+}
+
+footer > ul > li > a {
+
+}
+
+footer > ul > li:hover {
+    background-color: var(--highlight);
+} 
+
+footer > ul > li > a > picture > img {
+    height: 100%;
+}
+
+
+@media (max-width: 768px) {
+    header {
+        height: fit-content;
+        flex-direction: column;
+    }
+
+    header > a {
+        margin: 12px;
+    }
+
+    header > a > picture > img {
+        height: 32px;
+    }
+
+    header > ul {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    header > ul > li {
+        width: 100%;
+        padding: 4px 16px;
+        text-align: center;
+    }
 }
 
