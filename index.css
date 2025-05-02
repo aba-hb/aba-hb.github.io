@@ -176,12 +176,13 @@ main > article > h2 {
 }
 
 #hero > img {
-    width: 60vw;
-    height: 60vw;
-    max-width: 50vh;
-    max-height: 50vh;
+    width: 40vw;
+    height: 40vw;
+    max-width: 320px;
+    max-height: 320px;
     object-fit: cover;
-    border-radius: 256px;
+    align-self: center;
+    border-radius: 100%;
     margin-bottom: 40px;
 }
 
