@@ -127,6 +127,65 @@ footer > ul > li > a > picture > img {
 }
 
 
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 64px 10vw;
+    gap: 12px;
+}
+
+
+main > article {
+    display: flex;
+    align-items: center;
+    background-color: var(--highlight);
+    padding: 20px 48px;
+}
+
+main > article > img {
+    width: 20vw;
+    height: 20vw;
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 128px;
+    object-position: center;
+    image-rendering: optimizeQuality;
+    object-fit: cover;
+}
+
+main > article > h2 {
+    flex-grow: 1;
+    font-size: 2em;
+    margin-left: 24px;
+}
+
+#hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    text-align: center;
+}
+
+#hero h1 {
+    font-size: 3em;
+}
+
+#hero p {
+    font-size: 1.2em;
+}
+
+#hero > img {
+    width: 60vw;
+    height: 60vw;
+    max-width: 50vh;
+    max-height: 50vh;
+    object-fit: cover;
+    border-radius: 256px;
+    margin-bottom: 40px;
+}
+
+
 @media (max-width: 768px) {
     header {
         height: fit-content;
