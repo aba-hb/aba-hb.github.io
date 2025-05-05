@@ -5,6 +5,7 @@
     padding: 0px;
     box-sizing: border-box;
     font-family: monospace;
+    image-rendering: optimizeSpeed;
 
     --foreground-dark: #DDDDDDFF;
     --foreground-light: #222222FF;
@@ -150,7 +151,6 @@ footer > ul > li > a > picture > img {
     max-height: 200px;
     border-radius: 128px;
     object-position: center;
-    image-rendering: optimizeQuality;
     object-fit: cover;
 }
 
@@ -202,12 +202,13 @@ footer > ul > li > a > picture > img {
 .projectCard {
     border-radius: 16px;
     background-color: var(--highlight);
-    max-width: 512px;
     text-align: center;
+    max-width: 512px;
 }
 
 
-.projectCard > a > img {
+.projectCard > a > img,
+.projectCard > a > picture > img {
     width: 100%;
     height: 256px;
     object-fit: cover;
@@ -233,12 +234,19 @@ footer > ul > li > a > picture > img {
     padding: 8px;
     text-decoration: none;
     color: var(--foreground);
-    outline: 1px solid white;
+    outline: 1px solid var(--foreground);
     align-self: center;
 }
 
 .projectCard > div > a:hover {
     background-color: var(--background);
+}
+
+
+.wip {
+    width: 100%;
+    font-size: 48px;
+    text-align: center;
 }
 
 
