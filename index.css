@@ -1,5 +1,17 @@
 
 
+/*
+
+TODO:
+
+    * create variables for different tiers of margin, padding, font size etc.
+    * cleanup this stylesheet, do not use styling on default html tags except for resets.
+    * do not mix styling on the same property in- and outside of media queries,
+      all the media query dependent logic should happen in that media query.
+    
+*/
+
+
 * {
     margin: 0px;
     padding: 0px;
@@ -37,6 +49,19 @@
     }
 }
 
+
+::-webkit-scrollbar {
+    background-color: var(--background);
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+    background-color: var(--highlight)
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--highlight)
+}
 
 body {
     display: flex;
@@ -170,6 +195,11 @@ footer > ul > li > a > picture > img {
 
 #hero h1 {
     font-size: 3em;
+    margin-bottom: 20px;
+}
+
+#hero h2 {
+    margin-bottom: 4px;
 }
 
 #hero p {
@@ -247,6 +277,64 @@ footer > ul > li > a > picture > img {
     width: 100%;
     font-size: 48px;
     text-align: center;
+}
+
+#projectMain {
+    display: flex;
+    padding-top: 48px;
+    align-items: center;
+    flex-direction: column;
+    gap: 48px;
+}
+
+#project {
+    margin: 10vw;
+    max-width: 768px;
+    border-radius: 12px;
+    background-color: var(--highlight);
+    margin: 0px 10vw;
+    font-size: 12pt;
+    display: flex;
+    flex-direction: column;
+}
+
+#project > img {
+    width: 100%;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+#project > h1 {
+    padding-top: 32px;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+#project > small {
+    /* align-self: flex-end; */
+    padding: 8px 32px 0px 32px;
+}
+
+#project > p {
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-bottom: 32px;
+}
+
+
+.badges {
+    display: flex;
+    margin: 0px 32px;
+    /* width: max-content; */
+    /* justify-content: flex-end; */
+    padding-top: 8px;
+    padding-bottom: 32px;
+}
+
+.badges > span {
+    padding: 0px 16px;
+    border-radius: 8px;
+    background-color: var(--background);
 }
 
 
