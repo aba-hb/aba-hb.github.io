@@ -26,6 +26,10 @@ TODO:
     --highlight-dark: #333333FF;
     --highlight-light: #CCCCCCFF;
 
+    --gap-small: 4px;
+    --gap-medium: 12px;
+    --gap-large: 32px;
+
     --foreground: none;
     --background: none;
     --highlight: none;
@@ -63,7 +67,8 @@ TODO:
     background-color: var(--highlight)
 }
 
-body {
+
+.aba-root {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
@@ -100,7 +105,7 @@ header > ul {
 }
 
 header > ul > li {
-    padding: 4px 16px;
+    padding: var(--gap-small) var(--gap-medium);
     align-content: center;
 }
 
@@ -122,7 +127,7 @@ main {
 
 footer {
     text-align: center;
-    padding: 12px;
+    padding: var(--gap-medium);
 }
 
 footer > ul {
@@ -130,11 +135,11 @@ footer > ul {
     display: flex;
     justify-content: center;
     list-style: none;
-    margin: 8px 0px;
+    margin: var(--gap-medium) 0px;
 }
 
 footer > ul > li {
-    padding: 6px;
+    padding: var(--gap-small);
     flex-grow: 0;
     height: 100%;
     width: fit-content;
@@ -150,6 +155,45 @@ footer > ul > li:hover {
 
 footer > ul > li > a > picture > img {
     height: 100%;
+}
+
+
+.aba-home {
+    display: flex;
+    align-self: center;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px var(--gap-large);
+}
+
+.aba-home > h1 {
+    font-size: 3em;
+    margin-bottom: var(--gap-large);
+}
+
+.aba-home > h2 {
+    margin-bottom: var(--gap-small);
+}
+
+.aba-home > p {
+    font-size: 1.2em;
+}
+
+.aba-home > a > img {
+    width: 40vw;
+    height: 40vw;
+    max-width: 320px;
+    max-height: 320px;
+    object-fit: cover;
+    align-self: center;
+    border-radius: 100%;
+    margin-bottom: 40px;
+    outline: 8px solid var(--highlight);
+}
+
+.aba-home > a > img:hover {
+    outline: 8px solid var(--foreground);
 }
 
 
@@ -183,38 +227,6 @@ footer > ul > li > a > picture > img {
     flex-grow: 1;
     font-size: 2em;
     margin-left: 24px;
-}
-
-#hero {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-self: center;
-    text-align: center;
-}
-
-#hero h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-}
-
-#hero h2 {
-    margin-bottom: 4px;
-}
-
-#hero p {
-    font-size: 1.2em;
-}
-
-#hero > img {
-    width: 40vw;
-    height: 40vw;
-    max-width: 320px;
-    max-height: 320px;
-    object-fit: cover;
-    align-self: center;
-    border-radius: 100%;
-    margin-bottom: 40px;
 }
 
 
