@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="/resources/favicon.ico" />
     <link rel="manifest" href="/resources/site.webmanifest" />
     <meta name="apple-mobile-web-app-title" content="aba" />
-    
+
     <title>aba-hb</title>
 
 </head>
@@ -47,34 +47,112 @@
                 🚧🚧🚧
             </div>
             <article id="project">
-                <img src="../resources/stone_00.png" alt="STONE">
-                <h1>STONE - Statically Typed Object Notation Experiment</h1>
-                <!-- <small>date goes here</small> -->
-                <div class="badges">
-                    <span>C#</span>
-                </div>
-                <!-- <p> -->
-                    <!-- It was towards the end of 2024 when i decided that i need yet another side project, -->
-                    <!-- specifically one i could finish over the course of a weekend. At that point of time, -->
-                    <!-- i was obsessed with language development and figured that a custom object notation and -->
-                    <!-- de-/serialization engine would fit the scope. -->
-                <!-- </p> -->
-                <!-- <p> -->
-                    <!-- I always had this idea of an object notation with static typing, still no clue how -->
-                    <!-- this is supposed to be useful for anything that proper object notations didn't solve already -->
-                    <!-- but i just gave it a shot. On top, i also wanted to experiment with a modular approach on -->
-                    <!-- tokenization and parsing, so this project ended up being a 2-in-1 learning experience. -->
-                <!-- </p> -->
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, ab eligendi reiciendis qui quidem
-                    rem illo optio rerum aliquid necessitatibus quae voluptatum doloremque est suscipit reprehenderit! Enim
-                    eos, nam quae asperiores ipsum quisquam dolore perferendis eius sint sunt odit reiciendis distinctio,
-                    aliquam cum officia quos qui tempora obcaecati. Ab, assumenda! Error tenetur cumque, quibusdam
-                    voluptatum optio facere maxime doloremque, fugiat molestias odit commodi harum saepe quo dolore quaerat
-                    magnam a amet illo accusamus voluptate fugit porro aut placeat neque. Mollitia, harum sequi? Inventore
-                    quam perferendis est accusantium, vero soluta alias cum provident praesentium eos ullam sed quisquam
-                    sunt, voluptatem optio!
-                </p>
+                <img src="../resources/stone_00.png" alt="Teaser for the STONE Object Notation">
+                <cite style="text-align: center; margin: 0px 16px 0px 16px;"></cite>
+                <header>
+                    <h1>STONE - Statically Typed Object Notation Experiment</h1>
+                    <time>date goes here</time>
+                    <div class="badges">
+                        <span>C#</span>
+                    </div>
+                </header>
+                <section class="project-tableOfContents">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li>
+                            <a href="#projectIntroduction">Introduction</a>
+                        </li>
+                        <li>
+                            <a href="#projectImplementationAndDesign">Implementation & Design</a>
+                        </li>
+                        <li>
+                            <a href="#projectNextSteps">Next Steps</a>
+                        </li>
+                        <li>
+                            <a href="#projectConclusion">Conclusion</a>
+                        </li>
+                    </ul>
+                </section>
+                <section id="projectIntroduction">
+                    <h3>Introduction</h3>
+                    <code>
+<pre>
+[String] = "STONE"
+</pre>
+                    </code>
+                    <p>
+                        It was towards the end of 2024 when i decided that i need yet another side project,
+                        specifically one i could finish over the course of a weekend. At that point of time,
+                        i was obsessed with language development and figured that a custom object notation and
+                        de-/serialization engine would fit the scope.
+                    </p>
+                    <p>
+                        I always had this idea of an object notation with static typing, still no clue how
+                        this is supposed to be useful for anything that proper object notations didn't solve already,
+                        but i just gave it a shot. Additionally, i also wanted to experiment with a modular approach on
+                        tokenization and parsing, so this project was naturally a good fit and acted as a 2-in-1 learning experience.
+                    </p>
+                    <p>
+                        So i grabbed one of my favorite languages (C#), spent my mental capacities on finding a really
+                        terrible name for my idea and ended up creating STONE. If it's not clear by the title of this post,
+                        the name is an abbreviation for Statically Typed Object Notation Experiment (i won't type that out another time, promised).
+                    </p>
+                </section>
+                <section id="projectImplementationAndDesign">
+                    <h3>Implementation & Design</h3>
+                    <p>
+                        You might be thinking <i>Hey, shouldn't the order be Design & Implementation</i> and that would be a fair assumption,
+                        but due to one of the goals being a highly modular approach on tokenization and parsing this was actually one
+                        of the first things i tackled. The entire de-/serialization engine ended up being a bare 250 lines of code,
+                        would be even less if i'd follow the conventional and/or modern coding standards. 
+                    </p>
+                    <p>
+                        The engine is driven by two interfaces called Token Rule and Type Provider. Together with some recursive calls
+                        back into the engine, they handle most of the processing involved in serializing data and deserializing its STONE representation. 
+                    </p>
+                    <p>
+                        Here are the actual C# definition of those interfaces, starting with the one for Type Providers ..
+                    </p>
+                    <code>
+<pre>
+public interface IStoneTypeProvider
+{
+    bool CanProvideType(StoneEngineContext context, Type type);
+    IStoneNode CreateNodeFromData(StoneEngineContext context, object data, Type type);
+    IStoneNode CreateNodeFromSource(StoneEngineContext context, StoneTokenWalker tokenWalker, Type type);
+    object CreateData(StoneEngineContext context, IStoneNode node, Type type);
+    string CreateSource(StoneEngineContext context, IStoneNode node, Type type);
+}
+</pre>
+                    </code>
+                    <p>
+                        .. and here's the one for Token Rules:
+                    </p>
+                    <code>
+<pre>
+public interface IStoneTokenRule
+{
+    bool CanCreateToken(StoneSourceWalker sourceWalker);
+    IStoneToken CreateToken(StoneSourceWalker sourceWalker);
+}
+</pre>
+                    </code>
+                    <p>
+                        ...
+                    </p>
+                </section>
+                <section id="projectNextSteps">
+                    <h3>Next Steps</h3>
+                    <p>
+
+                    </p>
+                </section>
+                <section id="projectConclusion">
+                    <h3>Conclusion</h3>
+                    <p>
+
+                    </p>
+                </section>
             </article>
         </main>
     

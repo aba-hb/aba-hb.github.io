@@ -17,8 +17,11 @@ TODO:
     padding: 0px;
     box-sizing: border-box;
     font-family: monospace;
-    image-rendering: optimizeSpeed;
+    /* scroll-behavior: smooth; */
+    image-rendering: optimizeQuality;
 
+    --detail-dark: cornflowerblue;
+    --detail-light: blue;
     --foreground-dark: #DDDDDDFF;
     --foreground-light: #222222FF;
     --background-dark: #222222FF;
@@ -33,6 +36,7 @@ TODO:
     --foreground: none;
     --background: none;
     --highlight: none;
+    --detail: none;
 }
 
 
@@ -41,6 +45,7 @@ TODO:
         --foreground: var(--foreground-light);
         --background: var(--background-light);
         --highlight: var(--highlight-light);
+        --detail: var(--detail-light);
     }
 }
 
@@ -50,6 +55,7 @@ TODO:
         --foreground: var(--foreground-dark);
         --background: var(--background-dark);
         --highlight: var(--highlight-dark);
+        --detail: var(--detail-dark);
     }
 }
 
@@ -64,7 +70,7 @@ TODO:
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--highlight)
+    background-color: var(--foreground)
 }
 
 
@@ -301,13 +307,14 @@ footer > ul > li > a > picture > img {
 
 #project {
     margin: 10vw;
-    max-width: 768px;
+    min-width: calc(min(60vw, 256px));
+    max-width: calc(min(80vw, 768px));
     border-radius: 12px;
     background-color: var(--highlight);
+    flex-direction: column;
     margin: 0px 10vw;
     font-size: 12pt;
     display: flex;
-    flex-direction: column;
 }
 
 #project > img {
@@ -316,31 +323,76 @@ footer > ul > li > a > picture > img {
     border-top-right-radius: 12px;
 }
 
-#project > h1 {
-    padding-top: 32px;
-    padding-left: 32px;
-    padding-right: 32px;
+
+#project > section {
+    padding: var(--gap-large) var(--gap-large) 0px var(--gap-large);
 }
 
-#project > small {
-    /* align-self: flex-end; */
-    padding: 8px 32px 0px 32px;
+#project > section:last-child {
+    padding-bottom: var(--gap-large);
 }
 
-#project > p {
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-bottom: 32px;
+#project > section > h3,
+#project > section > p {
+    margin-bottom: var(--gap-medium);
 }
 
+#project > header {
+    display: flex;
+    align-items: start;
+    height: max-content;
+    flex-direction: column;
+    padding-top: var(--gap-large);
+    padding-left: var(--gap-large);
+    padding-right: var(--gap-large);
+}
+
+#project > header > h1 {
+
+}
+
+#project > header > time {
+    padding: var(--gap-medium) 0px var(--gap-medium) 0px;
+}
+
+
+
+#project > section > code {
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap-medium);
+    margin: var(--gap-medium) 0px;
+    background-color: var(--background);
+    overflow: auto;
+}
+
+#project > section > code > pre {
+    
+}
+
+
+.project-tableOfContents > ul {
+    padding: 0px var(--gap-large);
+}
+
+.project-tableOfContents > ul > li {
+    
+}
+
+.project-tableOfContents > ul > li > a {
+    color: var(--detail);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1em;
+}
+
+.project-tableOfContents > ul > li a:hover {
+    text-decoration: underline;
+    color: darkblue;
+}
 
 .badges {
     display: flex;
-    margin: 0px 32px;
-    /* width: max-content; */
-    /* justify-content: flex-end; */
-    padding-top: 8px;
-    padding-bottom: 32px;
 }
 
 .badges > span {
@@ -351,27 +403,27 @@ footer > ul > li > a > picture > img {
 
 
 @media (max-width: 768px) {
-    header {
+    .aba-root > header {
         height: fit-content;
         flex-direction: column;
     }
 
-    header > a {
-        margin: 12px;
+    .aba-root > header > a {
+        margin: var(--gap-medium);
     }
 
-    header > a > picture > img {
+    .aba-root > header > a > picture > img {
         height: 32px;
     }
 
-    header > ul {
+    .aba-root > header > ul {
         align-items: center;
         flex-direction: column;
     }
 
-    header > ul > li {
+    .aba-root > header > ul > li {
         width: 100%;
-        padding: 4px 16px;
+        padding: var(--gap-small) var(--gap-medium);
         text-align: center;
     }
 }
