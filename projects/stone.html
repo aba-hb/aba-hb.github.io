@@ -1,108 +1,120 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/resources/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/resources/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/resources/favicon.svg" />
+    <link rel="shortcut icon" href="/resources/favicon.ico" />
+    <link rel="manifest" href="/resources/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="aba" />
+    
     <title>aba-hb</title>
-</head>
 
+</head>
 <body>
 
-    <header>
-        <a href="../index.html">
-            <picture>
-                <source srcset="../resources/placeholder_logo_light.png" media="(prefers-color-scheme: light)">
-                <source srcset="../resources/placeholder_logo_dark.png" media="(prefers-color-scheme: dark)">
-                <img src="#" alt="LOGO">
-            </picture>
-        </a>
-        <ul>
-            <li>
-                <a href="../index.html">Home</a>
-            </li>
-            <li>
-                <a href="../projects.html">Projects</a>
-            </li>
-            <li>
-                <a href="../aboutme.html">About Me</a>
-            </li>
-        </ul>
-    </header>
+    <div class="aba-root">
 
-    <main id="projectMain">
-        <div class="wip">
-            🚧🚧🚧<br />
-            WORK IN PROGRESS<br />
-            🚧🚧🚧
-        </div>
-        <article id="project">
-            <img src="../resources/stone_00.png" alt="STONE">
-            <h1>STONE - Statically Typed Object Notation Experiment</h1>
-            <!-- <small>date goes here</small> -->
-            <div class="badges">
-                <span>C#</span>
+        <header>
+            <a href="../index.html">
+                <picture>
+                    <source srcset="../resources/placeholder_logo_light.png" media="(prefers-color-scheme: light)">
+                    <source srcset="../resources/placeholder_logo_dark.png" media="(prefers-color-scheme: dark)">
+                    <img src="#" alt="LOGO">
+                </picture>
+            </a>
+            <ul>
+                <li>
+                    <a href="../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../projects.html">Projects</a>
+                </li>
+                <li>
+                    <a href="../aboutme.html">About Me</a>
+                </li>
+            </ul>
+        </header>
+    
+        <main id="projectMain">
+            <div class="wip">
+                🚧🚧🚧<br />
+                WORK IN PROGRESS<br />
+                🚧🚧🚧
             </div>
-            <!-- <p> -->
-                <!-- It was towards the end of 2024 when i decided that i need yet another side project, -->
-                <!-- specifically one i could finish over the course of a weekend. At that point of time, -->
-                <!-- i was obsessed with language development and figured that a custom object notation and -->
-                <!-- de-/serialization engine would fit the scope. -->
-            <!-- </p> -->
-            <!-- <p> -->
-                <!-- I always had this idea of an object notation with static typing, still no clue how -->
-                <!-- this is supposed to be useful for anything that proper object notations didn't solve already -->
-                <!-- but i just gave it a shot. On top, i also wanted to experiment with a modular approach on -->
-                <!-- tokenization and parsing, so this project ended up being a 2-in-1 learning experience. -->
-            <!-- </p> -->
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, ab eligendi reiciendis qui quidem
-                rem illo optio rerum aliquid necessitatibus quae voluptatum doloremque est suscipit reprehenderit! Enim
-                eos, nam quae asperiores ipsum quisquam dolore perferendis eius sint sunt odit reiciendis distinctio,
-                aliquam cum officia quos qui tempora obcaecati. Ab, assumenda! Error tenetur cumque, quibusdam
-                voluptatum optio facere maxime doloremque, fugiat molestias odit commodi harum saepe quo dolore quaerat
-                magnam a amet illo accusamus voluptate fugit porro aut placeat neque. Mollitia, harum sequi? Inventore
-                quam perferendis est accusantium, vero soluta alias cum provident praesentium eos ullam sed quisquam
-                sunt, voluptatem optio!
-            </p>
-        </article>
-    </main>
-
-    <footer>
-        <ul>
-            <li>
-                <a href="https://www.youtube.com/@aba-hb">
-                    <picture>
-                        <source srcset="../resources/icon_youtube_light.png" media="(prefers-color-scheme: light)">
-                        <source srcset="../resources/icon_youtube_dark.png" media="(prefers-color-scheme: dark)">
-                        <img src="#" alt="LOGO">
-                    </picture>
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/aba-hb">
-                    <picture>
-                        <source srcset="../resources/icon_github_light.png" media="(prefers-color-scheme: light)">
-                        <source srcset="../resources/icon_github_dark.png" media="(prefers-color-scheme: dark)">
-                        <img src="#" alt="LOGO">
-                    </picture>
-                </a>
-            </li>
-            <li>
-                <a href="https://aba-hb.itch.io">
-                    <picture>
-                        <source srcset="../resources/icon_itchio_light.png" media="(prefers-color-scheme: light)">
-                        <source srcset="../resources/icon_itchio_dark.png" media="(prefers-color-scheme: dark)">
-                        <img src="#" alt="LOGO">
-                    </picture>
-                </a>
-            </li>
-        </ul>
-        <p>Made with ♥️🧠👻</p>
-        <p>© 2025</p>
-    </footer>
+            <article id="project">
+                <img src="../resources/stone_00.png" alt="STONE">
+                <h1>STONE - Statically Typed Object Notation Experiment</h1>
+                <!-- <small>date goes here</small> -->
+                <div class="badges">
+                    <span>C#</span>
+                </div>
+                <!-- <p> -->
+                    <!-- It was towards the end of 2024 when i decided that i need yet another side project, -->
+                    <!-- specifically one i could finish over the course of a weekend. At that point of time, -->
+                    <!-- i was obsessed with language development and figured that a custom object notation and -->
+                    <!-- de-/serialization engine would fit the scope. -->
+                <!-- </p> -->
+                <!-- <p> -->
+                    <!-- I always had this idea of an object notation with static typing, still no clue how -->
+                    <!-- this is supposed to be useful for anything that proper object notations didn't solve already -->
+                    <!-- but i just gave it a shot. On top, i also wanted to experiment with a modular approach on -->
+                    <!-- tokenization and parsing, so this project ended up being a 2-in-1 learning experience. -->
+                <!-- </p> -->
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, ab eligendi reiciendis qui quidem
+                    rem illo optio rerum aliquid necessitatibus quae voluptatum doloremque est suscipit reprehenderit! Enim
+                    eos, nam quae asperiores ipsum quisquam dolore perferendis eius sint sunt odit reiciendis distinctio,
+                    aliquam cum officia quos qui tempora obcaecati. Ab, assumenda! Error tenetur cumque, quibusdam
+                    voluptatum optio facere maxime doloremque, fugiat molestias odit commodi harum saepe quo dolore quaerat
+                    magnam a amet illo accusamus voluptate fugit porro aut placeat neque. Mollitia, harum sequi? Inventore
+                    quam perferendis est accusantium, vero soluta alias cum provident praesentium eos ullam sed quisquam
+                    sunt, voluptatem optio!
+                </p>
+            </article>
+        </main>
+    
+        <footer>
+            <ul>
+                <li>
+                    <a href="https://www.youtube.com/@aba-hb">
+                        <picture>
+                            <source srcset="../resources/icon_youtube_light.png" media="(prefers-color-scheme: light)">
+                            <source srcset="../resources/icon_youtube_dark.png" media="(prefers-color-scheme: dark)">
+                            <img src="#" alt="LOGO">
+                        </picture>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/aba-hb">
+                        <picture>
+                            <source srcset="../resources/icon_github_light.png" media="(prefers-color-scheme: light)">
+                            <source srcset="../resources/icon_github_dark.png" media="(prefers-color-scheme: dark)">
+                            <img src="#" alt="LOGO">
+                        </picture>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://aba-hb.itch.io">
+                        <picture>
+                            <source srcset="../resources/icon_itchio_light.png" media="(prefers-color-scheme: light)">
+                            <source srcset="../resources/icon_itchio_dark.png" media="(prefers-color-scheme: dark)">
+                            <img src="#" alt="LOGO">
+                        </picture>
+                    </a>
+                </li>
+            </ul>
+            <p>Made with ♥️🧠👻</p>
+            <p>© 2025</p>
+        </footer>
+    </div>
 
     <link rel="stylesheet" href="../index.css">
-</body>
 
+</body>
 </html>
+
