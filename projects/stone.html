@@ -50,7 +50,7 @@
                 <img src="../resources/stone_00.png" alt="Teaser for the STONE Object Notation">
                 <cite style="text-align: center; margin: 0px 16px 0px 16px;"></cite>
                 <header>
-                    <h1>STONE - Statically Typed Object Notation Experiment</h1>
+                    <h1>Babys First Object Notation</h1>
                     <time>date goes here</time>
                     <div class="badges">
                         <span>C#</span>
@@ -81,37 +81,112 @@
 </pre>
                     </code>
                     <p>
-                        It was towards the end of 2024 when i decided that i need yet another side project,
-                        specifically one i could finish over the course of a weekend. At that point of time,
-                        i was obsessed with language development and figured that a custom object notation and
-                        de-/serialization engine would fit the scope.
+                        It was towards the end of 2024 when I decided that I needed yet another side project,
+                        specifically one I could finish over the course of a weekend. At that point in time,
+                        I was obsessed with language development and figured that a custom object notation and
+                        <a href="https://en.wikipedia.org/wiki/Serialization">de/serialization</a> engine would fit the scope.
                     </p>
                     <p>
-                        I always had this idea of an object notation with static typing, still no clue how
-                        this is supposed to be useful for anything that proper object notations didn't solve already,
-                        but i just gave it a shot. Additionally, i also wanted to experiment with a modular approach on
-                        tokenization and parsing, so this project was naturally a good fit and acted as a 2-in-1 learning experience.
+                        If you're wondering about those funny words, de/serialization is the process of converting
+                        data inside a program into a (usually) language-independent format like text (for example
+                        <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> or <a href="https://en.wikipedia.org/wiki/XML">XML</a>)
+                        and vice versa. An object notation is simply that very same language-independent format, the specific structure the text needs
+                        to take on, perhaps just another word for <a href="https://en.wikipedia.org/wiki/Syntax_(programming_languages)">syntax</a>, but in a different context!?
                     </p>
                     <p>
-                        So i grabbed one of my favorite languages (C#), spent my mental capacities on finding a really
+                        I always had this idea of an object notation with <a href="https://en.wikipedia.org/wiki/Type_system#Static_type_checking">static typing</a>,
+                        still no clue how this is supposed to be useful for anything that proper object notations didn't solve already, but I just gave it a shot. 
+                        Additionally, I also wanted to experiment with a modular approach to <a href="https://en.wikipedia.org/wiki/Lexical_analysis">tokenization</a>
+                        and <a href="https://en.wikipedia.org/wiki/Parsing">parsing</a>, this project was naturally a good fit and acted as a 2-in-1 learning experience.
+                    </p>
+                    <p>
+                        So I grabbed one of my favorite languages (<a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)">C#</a>), spent my mental capacities on finding a really
                         terrible name for my idea and ended up creating STONE. If it's not clear by the title of this post,
-                        the name is an abbreviation for Statically Typed Object Notation Experiment (i won't type that out another time, promised).
+                        the name is an abbreviation for <b>S</b>tatically <b>T</b>yped <b>O</b>bject <b>N</b>otation <b>E</b>xperiment (I won't type that out another time, promised).
                     </p>
                 </section>
                 <section id="projectImplementationAndDesign">
                     <h3>Implementation & Design</h3>
                     <p>
-                        You might be thinking <i>Hey, shouldn't the order be Design & Implementation</i> and that would be a fair assumption,
-                        but due to one of the goals being a highly modular approach on tokenization and parsing this was actually one
-                        of the first things i tackled. The entire de-/serialization engine ended up being a bare 250 lines of code,
-                        would be even less if i'd follow the conventional and/or modern coding standards. 
+                        You might be thinking <i>Hey, shouldn't the order be Design & Implementation?</i> and that would be a fair assumption,
+                        but due to one of the goals being a highly modular approach to tokenization and parsing this became the first thing I tackled.
+                        Actually, one could say that this object notation does'nt actually have a fixed design; rather it's implementation defined.
                     </p>
                     <p>
-                        The engine is driven by two interfaces called Token Rule and Type Provider. Together with some recursive calls
-                        back into the engine, they handle most of the processing involved in serializing data and deserializing its STONE representation. 
+                        The engine is driven by two interfaces called Token Rule and Type Provider. By contributing their own pieces of functionality and being able to
+                        recursively call back into the engine, they handle most of the processing involved in serializing data and deserializing its STONE representation. 
+                        Without any of those interfaces being registered in the appropriate locations, the engine is merely a fancy mechanism to throw exceptions.
                     </p>
                     <p>
-                        Here are the actual C# definition of those interfaces, starting with the one for Type Providers ..
+                        What I'm referring to is that the engine itself, especially for serialization, does nothing besides delegating the work into Type Providers. 
+                        For deserialization, there's additional work that utilizes the Token Rules to transform the text into a more structured representation before, 
+                        again, delegating the work into Type Providers. The only real functionalities provided by the engine are what I called a Source Walker and a Token Walker,
+                        fancy names for something that's essentially iterating over a collection, tracking the current position inside of it and potentially allows for backtracking.
+                    </p>
+                    <p>
+                        I'll show you the few important methods used for serialization, it's pretty simple:
+                    </p>
+                    <code>
+<pre>
+public static string Serialize(object data, Type type)
+{
+    // ... some safety checks ...
+
+    StoneTree tree = CreateTreeFromData(data, type);
+    string source = CreateSourceFromTree(tree, type);
+
+    return source;
+}
+
+
+private static StoneTree CreateTreeFromData(object data, Type type)
+{
+    StoneEngineContext context = new StoneEngineContext
+    {
+        SourceFormatting = new StoneSourceFormattingContext(),
+        CustomContexts = new Dictionary<Type, IStoneCustomContext>(),
+    };
+
+    for (int i = 0; i < m_TypeProviders.Count; i++)
+    {
+        if (m_TypeProviders[i].CanProvideType(context, type))
+        {
+            IStoneTreeNode rootNode = m_TypeProviders[i].CreateNodeFromData(context, data, type);
+            return new StoneTree { Root = rootNode };
+        }
+    }
+
+    throw new StoneEngineException($"No TypeProvider for {type}");
+}
+
+
+private static string CreateSourceFromTree(StoneTree tree, Type type)
+{
+    StoneEngineContext context = new StoneEngineContext
+    {
+        SourceFormatting = new StoneSourceFormattingContext(),
+        CustomContexts = new Dictionary<Type, IStoneCustomContext>(),
+    };
+
+    for (int i = 0; i < m_TypeProviders.Count; i++)
+    {
+        if (m_TypeProviders[i].CanProvideType(context, type))
+        {
+            return m_TypeProviders[i].CreateSource(context, tree.Root, type);
+        }
+    }
+
+    throw new StoneEngineException($"No TypeProvider for {type}");
+}
+</pre>
+                    </code>
+                    <p>
+                        There's also a version of the Serialize method using generics rather than an object and a Type. It does 
+                        nothing besides calling back into the non generic version but is much more pleasant to use as a consumer of the API.
+                        The pattern for the corresponding Deserialize method(s) is the same, in reversed order.
+                    </p>
+                    <p>
+                        You can probably imagine what the Type Provider interface looks like at this point, here's what I came up with:
                     </p>
                     <code>
 <pre>
@@ -122,11 +197,20 @@ public interface IStoneTypeProvider
     IStoneNode CreateNodeFromSource(StoneEngineContext context, StoneTokenWalker tokenWalker, Type type);
     object CreateData(StoneEngineContext context, IStoneNode node, Type type);
     string CreateSource(StoneEngineContext context, IStoneNode node, Type type);
-}
+}    
 </pre>
                     </code>
                     <p>
-                        .. and here's the one for Token Rules:
+                        On the consumer side, it looks similar to what someone would expect in other de/serialization solutions, a single method call.
+                    </p>
+                    <code>
+<pre>
+string source = StoneEngine.Serialize(someClass);
+someClass = StoneEngine.Deserialize&lt;SomeClass&lt;float&gt;&gt;(source);
+</pre>
+                    </code>
+                    <p>
+                        The Token Rule interface is even smaller:
                     </p>
                     <code>
 <pre>
@@ -134,25 +218,62 @@ public interface IStoneTokenRule
 {
     bool CanCreateToken(StoneSourceWalker sourceWalker);
     IStoneToken CreateToken(StoneSourceWalker sourceWalker);
-}
+}    
 </pre>
                     </code>
                     <p>
-                        ...
+                        As you can see, we're using interfaces most of the time, that's what I considered to qualify as highly modular when
+                        writing this code. One could say it worked, but I'm still not sure what to think about this. 
                     </p>
-                </section>
-                <section id="projectNextSteps">
-                    <h3>Next Steps</h3>
                     <p>
-
+                        This kind of implementation definitely ended up doing some harm, it's not straightforward to follow
+                        the flow of execution and all the interfaces consumers feel bloated to me, although that's subjective.
+                        The class responsible for serialization and deserialization of integers consists of around 70 lines of code
+                        and it didn't get any better for more complex types like dictionaries or multidimensional arrays. 
                     </p>
-                </section>
-                <section id="projectConclusion">
-                    <h3>Conclusion</h3>
                     <p>
-
+                        For comparison, the file I consider to be the core ends up around 550 lines of code while containing all
+                        the essential types and functionality. It holds the interface definitions, the tokenizer, the utility classes
+                        used for iterating and consuming strings and tokens, the engine itself and all of the other good stuff. The actual
+                        implementation (all the different kinds of Token Rules and Type Providers as well as a little bit of utility) is
+                        around 2.300 lines of code, that's more than four times the amount of the underlying system. 
                     </p>
+                    <p>
+                        Now, about the design, I'll keep it short. It's easy because, naturally due to the modular implementation,
+                        there is not necessary a single, fixed design for the object notation itself. Each Type Provider could theoretically
+                        use its own distinct style of serialization and deserialization and still work seamlessly within the system, but for
+                        my current implementation I settled on a simple 'TYPE = VALUE' pattern. Here's a small sample of a C# class definition
+                        and the corresponding STONE representation:
+                    </p>
+                    <code>
+<pre>
+[Class] = {
+    Value: [Float] = 20
+    State: [Bool] = True
+    MemberStruct: [Struct] = {
+        A: [Float] = 80
+        B: [Float] = 140
+    }
+}
+</pre>
+                    </code>
+                    <!-- <p> -->
+                        <!-- The entire de/serialization engine ended up being a bare 250 lines of code, maybe shorter if I'd follow more conventional and/or modern coding standards -->
+                        <!-- but this was not a project to practice clean code, it was an experimental implementation of weird ideas.  -->
+                    <!-- </p> -->
                 </section>
+                <!-- <section id="projectNextSteps"> -->
+                    <!-- <h3>Next Steps</h3> -->
+                    <!-- <p> -->
+
+                    <!-- </p> -->
+                <!-- </section> -->
+                <!-- <section id="projectConclusion"> -->
+                    <!-- <h3>Conclusion</h3> -->
+                    <!-- <p> -->
+
+                    <!-- </p> -->
+                <!-- </section> -->
             </article>
         </main>
     
