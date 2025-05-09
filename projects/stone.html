@@ -91,7 +91,7 @@
                         data inside a program into a (usually) language-independent format like text (for example
                         <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> or <a href="https://en.wikipedia.org/wiki/XML">XML</a>)
                         and vice versa. An object notation is simply that very same language-independent format, the specific structure the text needs
-                        to take on, perhaps just another word for <a href="https://en.wikipedia.org/wiki/Syntax_(programming_languages)">syntax</a>, but in a different context!?
+                        to take on (perhaps just another word for <a href="https://en.wikipedia.org/wiki/Syntax_(programming_languages)">syntax</a>).
                     </p>
                     <p>
                         I always had this idea of an object notation with <a href="https://en.wikipedia.org/wiki/Type_system#Static_type_checking">static typing</a>,
@@ -110,7 +110,7 @@
                     <p>
                         You might be thinking <i>Hey, shouldn't the order be Design & Implementation?</i> and that would be a fair assumption,
                         but due to one of the goals being a highly modular approach to tokenization and parsing this became the first thing I tackled.
-                        Actually, one could say that this object notation does'nt actually have a fixed design; rather it's implementation defined.
+                        Actually, one could say that this object notation doesn't even have a fixed design or specification or anything like this, it's all implementation defined.
                     </p>
                     <p>
                         The engine is driven by two interfaces called Token Rule and Type Provider. By contributing their own pieces of functionality and being able to
@@ -181,7 +181,7 @@ private static string CreateSourceFromTree(StoneTree tree, Type type)
 </pre>
                     </code>
                     <p>
-                        There's also a version of the Serialize method using generics rather than an object and a Type. It does 
+                        There's also a version of the Serialize method using generics rather than an object along with its Type. It does 
                         nothing besides calling back into the non generic version but is much more pleasant to use as a consumer of the API.
                         The pattern for the corresponding Deserialize method(s) is the same, in reversed order.
                     </p>
@@ -201,15 +201,6 @@ public interface IStoneTypeProvider
 </pre>
                     </code>
                     <p>
-                        On the consumer side, it looks similar to what someone would expect in other de/serialization solutions, a single method call.
-                    </p>
-                    <code>
-<pre>
-string source = StoneEngine.Serialize(someClass);
-someClass = StoneEngine.Deserialize&lt;SomeClass&lt;float&gt;&gt;(source);
-</pre>
-                    </code>
-                    <p>
                         The Token Rule interface is even smaller:
                     </p>
                     <code>
@@ -222,13 +213,35 @@ public interface IStoneTokenRule
 </pre>
                     </code>
                     <p>
-                        As you can see, we're using interfaces most of the time, that's what I considered to qualify as highly modular when
-                        writing this code. One could say it worked, but I'm still not sure what to think about this. 
+                        What's happening inside that code is pretty straight forward, it builds a <a href="https://en.wikipedia.org/wiki/Tree_(abstract_data_type)">tree</a>,
+                        a common data structure in computer science that can be used within all kinds of different domains like the implementation of
+                        programming languages or UI layout engines, just to name a few. For serialization, the tree is directly built from the data, 
+                        the received object, no intermediate steps taken. For deserialization, there's a tokenization step happening that utilizes
+                        the aforementioned Token Rule interface. By the way, the nodes stored inside the tree as well as the tokens produced by
+                        token rules are interfaces as well, essentially just a qualifier to make any custom types compatible with the APIs,
+                        they do not provide <i>any</i> contract at all. 
+                    </p>
+                    <p>
+                        At the point in time when creating this project, I considered an interface-heavy approach to qualify as highly modular,
+                        even today I still don't know what to think about this approach. Is it really modular if there's no logic provided at all?
                     </p>
                     <p>
                         This kind of implementation definitely ended up doing some harm, it's not straightforward to follow
                         the flow of execution and all the interfaces consumers feel bloated to me, although that's subjective.
-                        The class responsible for serialization and deserialization of integers consists of around 70 lines of code
+                        With bloated, I'm talking in terms of the <a href="https://en.wikipedia.org/wiki/Single-responsibility_principle">Single Responsibility Principe</a>.
+                        There's a lot of different interpretations on what's that about, but my favorite conclusion is <b>a piece of logic should only do one thing, but do it well</b>,
+                        while a piece of logic could actually anything between a method, a data type (aka an object) or even a module. In our case,
+                        this piece of logic is the Type Provider interface, and simply by taking a look at the methods names it's obvious that it's
+                        is doing more than that.
+                    </p>
+                    <p>
+                        One could say, it does handle serialization and deserialization and it has some kind of precondition.
+                        Alternatively, it does work with objects and it does work with strings, in both of these views it 
+                        would be reasonable to split this apart into freestanding serialization and deserialization providers 
+                        that do not need to interfere with each other. 
+                    </p>
+                    <p>
+                        The class responsible for serialization and deserialization of simple integers consists of around 70 lines of code
                         and it didn't get any better for more complex types like dictionaries or multidimensional arrays. 
                     </p>
                     <p>
@@ -236,7 +249,7 @@ public interface IStoneTokenRule
                         the essential types and functionality. It holds the interface definitions, the tokenizer, the utility classes
                         used for iterating and consuming strings and tokens, the engine itself and all of the other good stuff. The actual
                         implementation (all the different kinds of Token Rules and Type Providers as well as a little bit of utility) is
-                        around 2.300 lines of code, that's more than four times the amount of the underlying system. 
+                        around 2.300 lines of code, that's more than four times the amount of the underlying system.
                     </p>
                     <p>
                         Now, about the design, I'll keep it short. It's easy because, naturally due to the modular implementation,
@@ -247,33 +260,197 @@ public interface IStoneTokenRule
                     </p>
                     <code>
 <pre>
+public class SomeClass<T>
+{
+    public T Value;
+    public bool State;
+    public SomeStruct<T, int, string> MemberStruct;
+}
+
+public struct SomeStruct<T1, T2, T3>
+{
+    public T1 A;
+    public T1 B;
+}
+</pre>
+                    </code>
+                    <code>
+<pre>
 [Class] = {
-    Value: [Float] = 20
-    State: [Bool] = True
+    Value: [Float] = 0
+    State: [Bool] = False
     MemberStruct: [Struct] = {
-        A: [Float] = 80
-        B: [Float] = 140
+        A: [Float] = 0
+        B: [Float] = 0
     }
 }
 </pre>
                     </code>
-                    <!-- <p> -->
-                        <!-- The entire de/serialization engine ended up being a bare 250 lines of code, maybe shorter if I'd follow more conventional and/or modern coding standards -->
-                        <!-- but this was not a project to practice clean code, it was an experimental implementation of weird ideas.  -->
-                    <!-- </p> -->
+                    <p>
+                        Performing a de/serialization operation is simple, a single method call on the engine:
+                    </p>
+                    <code>
+<pre>
+SomeClass&lt;float&gt; someClass = new SomeClass&lt;float&gt;();
+
+string source = StoneEngine.Serialize(someClass);
+someClass = StoneEngine.Deserialize&lt;SomeClass&lt;float&gt;&gt;(source);
+</pre>
+                    </code>
+                    <p>
+                        Of course we need to provide Token Rules and Type Providers if we want anything to happen at all,
+                        as previously mentioned the engine itself would just throw an exception if we'd try to de/serialize 
+                        something without any of those interfaces being registered (which practically is, again, a single method call).
+                    </p>
+                    <p>
+                        Honestly, implementing those interfaces is kind of a chore, the involved APIs of the engine and Token/Source Walkers
+                        are not too much fun to use. I'll attach the source code of the actual Type Provider for integers at the very end of this post,
+                        to not scare you away immediately.
+                    </p>
+                    <p>
+                        Thankfully, we can just continue using the few Type Providers I already implemented when creating this project, they handle
+                        a decent amount of types (for a hobby object notation that was written within a few days) but are not versatile enough
+                        to turn STONE into a serious alternative for any other format. 
+                    </p>
+                    <p>
+                        For example, one of the biggest downsides (especially for the .NET ecosystem) 
+                        is my deliberate design choice of only handling fields, no properties. This naturally excludes de/serialization of interfaces,
+                        as those are not able to hold fields at all.
+                    </p>
+                    <p>
+                        What the currently implemented Type Providers <i>can</i> handle are different kinds of Arrays (both n-dimensional and jagged), generic lists and dictionaries,
+                        enums, structs and most of the primitives one would expect (integers, strings and more). It also works for both base classes and child classes, but the latter 
+                        is more of a side effect in the system and not something that's explicitly supported. Who knows when this will break,  I've never used
+                        STONE for anything after creating it which also means I won't catch any of the hidden bugs and/or edge cases.
+                    </p>
+                    <p>
+                        At the beginning, I said that each Type Provider could theoretically use its own distinct style of serialization and deserialization
+                        and still work seamlessly within the system, I'll not talk about this <i>too</i> much as its barely an intuitive thing to do, but let
+                        me show you a simple example for the usual Type Provider and an alternative 'gibberish' version for integers: 
+                    </p>
+                    <code>
+<pre>
+try
+{
+    string source = StoneEngine.Serialize(-420);
+    int value = StoneEngine.Deserialize<int>(source);
+    
+    Logging.Log(source);
+
+    StoneEngine.UnregisterTypeProvider(StoneBuiltinTypeProviders.TypeProvider_Int32);
+    StoneEngine.RegisterTypeProvider(new DemoTypeProvider_GibberishInt());
+
+    source = StoneEngine.Serialize(value);
+    value = StoneEngine.Deserialize<int>(source);
+    
+    Logging.Log(source);
+
+    Logging.Log(value);
+}
+catch (StoneException exception)
+{
+    Logging.LogException(exception);
+}
+</pre>
+                    </code>
+                    <code>
+<pre>
+[Int] = -420
+&lt;/\&lt; | ZRRRRQQ
+-420
+</pre>
+                    </code>
+                    <p>
+                        The try-catch block is kind of redundant, I do know there's a Type Provider registered for the first operation
+                        and any proceeding operations are basically a roundtrip of the data, but in a real world scenario it's 
+                        definitely a good idea to not blindly trust your de/serialization mechanism, not even or especially
+                        not if you've written it yourself.
+                    </p>
+                    <p>
+                        Nonetheless, as you can see, our final data within the program is the very same as the one we initially serialized,
+                        and it even went through multiple different formats. Also, as I said, un/registering Type Providers
+                        is as easy as a single method call (although in this specific example, it would be impossible to
+                        ever unregister the gibberish Type Provider because we're not keeping a reference to it).
+                    </p>
+                    <p>
+                        Finally, here's the promised source code for the Type Provider of integers:
+                    </p>
+                    <code>
+<pre>
+public class StoneTypeProvider_Int32 : IStoneTypeProvider
+{
+    public bool CanProvideType(StoneEngineContext context, Type type)
+    {
+        if (type == typeof(Int32))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public IStoneNode CreateNodeFromData(StoneEngineContext context, object data, Type type)
+    {
+        return new StoneValue
+        {
+             Annotation = "Int",
+             TextValue = data.ToString(),
+        };
+    }
+
+    public IStoneNode CreateNodeFromSource(StoneEngineContext context, StoneTokenWalker tokenWalker, Type type)
+    {
+        tokenWalker.SkipBuiltinWhitespaceTokens();
+        tokenWalker.ExpectBuiltinTokenType(StoneBuiltinTokenType.BracketsOpen);
+        tokenWalker.ExpectBuiltinConstantFixed("Int");
+        tokenWalker.ExpectBuiltinTokenType(StoneBuiltinTokenType.BracketsClose);
+
+        tokenWalker.SkipBuiltinWhitespaceTokens();
+        tokenWalker.ExpectBuiltinTokenType(StoneBuiltinTokenType.Equal);
+
+        bool hasNegation = false;
+        tokenWalker.SkipBuiltinWhitespaceTokens();
+        if (tokenWalker.IsFinished() == false
+            && tokenWalker.PeekBuiltinTokenType(StoneBuiltinTokenType.Hyphen))
+        {
+            tokenWalker.Advance();
+            hasNegation = true;
+        }
+
+        tokenWalker.SkipBuiltinWhitespaceTokens();
+        tokenWalker.ExpectBuiltinConstant(out StoneBuiltinToken valueToken);
+
+        return new StoneValue
+        {
+            Annotation = "Int",
+            TextValue = $"{(hasNegation ? "-" : "")}{valueToken.SourceSample.Content}",
+        };
+    }
+
+    public object CreateData(StoneEngineContext context, IStoneNode node, Type type)
+    {
+        StoneValue valueNode = (StoneValue)node;
+
+        if (Int32.TryParse(valueNode.TextValue, out Int32 result))
+        {
+            return result;
+        }
+
+        throw new StoneBuiltinsException("Error creating Int32");
+    }
+
+    public string CreateSource(StoneEngineContext context, IStoneNode node, Type type)
+    {
+        StoneValue valueNode = (StoneValue)node;
+        StoneSourceFormattingContext sourceFormattingContext = context.SourceFormatting;
+
+        return $"{sourceFormattingContext.Indentation()}[{valueNode.Annotation}] = {valueNode.TextValue}";
+    }
+}
+
+</pre>
+                    </code>
                 </section>
-                <!-- <section id="projectNextSteps"> -->
-                    <!-- <h3>Next Steps</h3> -->
-                    <!-- <p> -->
-
-                    <!-- </p> -->
-                <!-- </section> -->
-                <!-- <section id="projectConclusion"> -->
-                    <!-- <h3>Conclusion</h3> -->
-                    <!-- <p> -->
-
-                    <!-- </p> -->
-                <!-- </section> -->
             </article>
         </main>
     
